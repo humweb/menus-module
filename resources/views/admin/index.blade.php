@@ -54,8 +54,5 @@
 
             });
         </script>
-        @section('style')
-            <link rel="stylesheet" href="{{ asset('assets/css/dd.css') }}">
-        @show
     </div>
 @show
