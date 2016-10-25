@@ -2,7 +2,8 @@
 
 namespace Humweb\Menus\Controllers;
 
-use App\Http\Controllers\AdminController;
+
+use Humweb\Core\Http\Controllers\AdminController;
 use Humweb\Pages\Repositories\DbPageRepositoryInterface;
 use Humweb\Menus\Models\MenuModel;
 use Humweb\Menus\Models\MenuLinkModel;
