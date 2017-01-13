@@ -2,7 +2,9 @@
 
 namespace Humweb\Menus\Models;
 
-class MenuModel extends \Eloquent
+use Illuminate\Database\Eloquent\Model;
+
+class Menu extends Model
 {
     /**
      * Define the table name.
@@ -29,7 +31,7 @@ class MenuModel extends \Eloquent
 
     public function links()
     {
-        return $this->hasMany('Humweb\Menus\Models\MenuLinkModel', 'menu_id');
+        return $this->hasMany(MenuItem::class, 'menu_id');
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Humweb\Menus\Models;
 
 use Humweb\Menus\Menu;
 use Humweb\Menus\Presenters\Bootstrap;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Link types.
@@ -13,13 +14,9 @@ use Humweb\Menus\Presenters\Bootstrap;
  * - Page
  * - Content
  */
-class MenuLinkModel extends \Eloquent
+class MenuItem extends Model
 {
-    public static $rules = [
-        'title' => 'required|min:3',
-        'menu_id' => 'required|numeric',
-        'published' => 'in:0,1',
-    ];
+
     /**
      * Disable updated_at and created_at on table.
      *
@@ -33,12 +30,12 @@ class MenuLinkModel extends \Eloquent
      */
     protected $table = 'menu_items';
     protected $fillable = array('menu_id', 'title', 'url', 'content', 'permissions');
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
-    protected $guarded = array();
+
+    public static $rules = [
+        'title' => 'required|min:3',
+        'menu_id' => 'required|numeric',
+        'published' => 'in:0,1',
+    ];
 
     /**
      * Relationships.
@@ -49,27 +46,7 @@ class MenuLinkModel extends \Eloquent
         $tree = static::tree($id);
         $menu = new Menu($tree, new Bootstrap());
         return $menu->render();
-//
-//        if (is_array($tree)) {
-//            foreach ($tree as $leaf) {
-//                $has_children = !empty($leaf['children']);
-//
-//                if ($has_children)
-//                {
-//                    $output .= '<li class="'.($has_children ? 'dropdown' : '').'">'.'<a href="#" class="dropdown-toggle" data-toggle="dropdown">'.$leaf['title'].' <span class="caret"></span></a> ';
-//                }
-//                else {
-//                    $output .= '<li><a href="'.url($leaf['url']).'">'.$leaf['title'].'</a> ';
-//                }
-//
-//                if (isset($leaf['children']) && !empty($leaf['children'])) {
-//                    $output .= '<ul class="dropdown-menu depth-'.$depth.'">'.static::build_navigation($id, $leaf['children'], $depth+1).'</ul>';
-//                }
-//                $output .= '</li>';
-//            }
-//
-//            return $output;
-//        }
+
     }
 
     /**
@@ -79,7 +56,7 @@ class MenuLinkModel extends \Eloquent
      */
     public function parent()
     {
-        return $this->belongsTo('MenuLinkModel', 'parent_id');
+        return $this->belongsTo(MenuItem::class, 'parent_id');
     }
 
     /**
@@ -89,7 +66,7 @@ class MenuLinkModel extends \Eloquent
      */
     public function children()
     {
-        return $this->hasMany('MenuLinkModel', 'parent_id');
+        return $this->hasMany(MenuItem::class, 'parent_id');
     }
 
     /**
@@ -99,7 +76,7 @@ class MenuLinkModel extends \Eloquent
      */
     public function menu()
     {
-        return $this->belongsTo('MenuModel', 'menu_id');
+        return $this->belongsTo(Menu::class, 'menu_id');
     }
 
     /**
