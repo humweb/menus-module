@@ -2,12 +2,10 @@
 
 namespace Humweb\Menus\Controllers;
 
-
 use Humweb\Core\Http\Controllers\AdminController;
-use Humweb\Pages\Repositories\DbPageRepositoryInterface;
-use Humweb\Menus\Models\MenuModel;
 use Humweb\Menus\Models\MenuLinkModel;
-use Humweb\Pages\Models\Page;
+use Humweb\Menus\Models\MenuModel;
+use Humweb\Pages\Repositories\DbPageRepositoryInterface;
 use Illuminate\Http\Request;
 
 class AdminMenuController extends AdminController
@@ -17,30 +15,34 @@ class AdminMenuController extends AdminController
 
     protected $data;
 
+
     public function __construct(DbPageRepositoryInterface $page)
     {
         parent::__construct();
 
-        if (!empty($page)) {
+        if ( ! empty($page)) {
             $this->page = $page;
         }
 
-        $this->menu = new MenuModel();
+        $this->menu     = new MenuModel();
         $this->menulink = new MenuLinkModel();
-//        $this->setTitle('Menus');
+        //        $this->setTitle('Menus');
     }
+
 
     public function getCreate()
     {
         $this->setTitle('Create Menu');
         $this->crumb('Menus', route('get.admin.menu.index'));
+
         return $this->setContent('menus::admin.menu.create', $this->data);
     }
+
 
     public function postCreate(Request $request)
     {
         $this->menu->title = $request->get('title');
-        $this->menu->slug = $request->get('slug');
+        $this->menu->slug  = $request->get('slug');
 
         //$Menu = $this->menu->create($data);
 
@@ -51,6 +53,7 @@ class AdminMenuController extends AdminController
         return redirect()->back()->withInput()->withErrors($this->menu->getErrors());
     }
 
+
     public function getIndex()
     {
         $this->setTitle('Menus');
@@ -60,6 +63,7 @@ class AdminMenuController extends AdminController
 
         return $this->setContent('menus::admin.menu.index', $this->data);
     }
+
 
     public function getDeleteItem(Request $request, $menu_id, $id)
     {
@@ -73,32 +77,34 @@ class AdminMenuController extends AdminController
         }
     }
 
+
     public function getItems($id)
     {
-
 
         empty($id) and dd('Must have a menu ID');
         $this->setTitle('Menu Items');
         $this->data['menu_id'] = $id;
-        $this->data['items'] = $this->menulink->orderBy('order', 'desc')->get();
+        $this->data['items']   = $this->menulink->orderBy('order', 'desc')->get();
         $this->data['content'] = $this->menulink->build_admin_tree($id);
-        $this->data['tree'] = $this->menulink->tree($id);
+        $this->data['tree']    = $this->menulink->tree($id);
 
         $this->crumb('Menus', route('get.admin.menu.index'))->crumb('Menu Items');
+
         return $this->setContent('menus::admin.index', $this->data);
     }
 
+
     public function getEditItem(Request $request, $table_id, $id)
     {
-        $this->data['link'] = $this->menulink->findOrFail($id);
+        $this->data['link']        = $this->menulink->findOrFail($id);
         $this->data['user_groups'] = \DB::table('groups')->pluck('name');
-        $this->data['pages'] = $this->page->build_select();
+        $this->data['pages']       = $this->page->build_select();
 
         // dd($this->data['link']->permissions);
 
         // Group permissions
-        if (!empty($this->data['link']->permissions->groups)) {
-            $vals = array_values($this->data['link']->permissions->groups);
+        if ( ! empty($this->data['link']->permissions->groups)) {
+            $vals                       = array_values($this->data['link']->permissions->groups);
             $this->data['link']->groups = array_combine($vals, $vals);
 
             foreach ($this->data['link']->permissions->groups as $key => $value) {
@@ -109,21 +115,23 @@ class AdminMenuController extends AdminController
         }
 
         // Users permissions
-         if (!empty($this->data['link']->permissions->users)) {
-             $vals = array_values($this->data['link']->permissions->users);
-             $this->data['link']->users = array_combine($vals, $vals);
-         }
+        if ( ! empty($this->data['link']->permissions->users)) {
+            $vals                      = array_values($this->data['link']->permissions->users);
+            $this->data['link']->users = array_combine($vals, $vals);
+        }
 
         $this->setTitle('Edit Menu Items');
         $this->crumb('Menus', route('get.admin.menu.index'))->crumb('Edit');
+
         return $this->setContent('menus::admin.edit', $this->data);
     }
 
+
     public function getNewItem($id, $parent_id = 0)
     {
-        $this->data['menu_id'] = $id;
-        $this->data['parent_id'] = $parent_id ?: 0;
-        $this->data['pages'] = $this->page->build_select();
+        $this->data['menu_id']     = $id;
+        $this->data['parent_id']   = $parent_id ?: 0;
+        $this->data['pages']       = $this->page->build_select();
         $this->data['user_groups'] = \DB::table('groups')->pluck('name', 'name');
         $this->setTitle('Create Menu Item');
         $this->crumb('Menus', route('get.admin.menu.index'))->crumb('Create');
@@ -131,15 +139,16 @@ class AdminMenuController extends AdminController
         return $this->setContent('menus::admin.create', $this->data);
     }
 
+
     public function postEditItem(Request $request, $menu_id, $id = 0)
     {
         $link = $this->menulink->findOrFail($id);
 
-        $link->menu_id = $request->get('menu_id');
+        $link->menu_id   = $request->get('menu_id');
         $link->parent_id = $request->get('parent_id', 0);
-        $link->title = $request->get('title');
-        $link->url = $request->get('url');
-        $permissions = [];
+        $link->title     = $request->get('title');
+        $link->url       = $request->get('url');
+        $permissions     = [];
 
         if ($request->has('groups')) {
             $permissions['groups'] = $request->get('groups');
@@ -148,7 +157,7 @@ class AdminMenuController extends AdminController
             $permissions['users'] = $request->get('users');
         }
 
-        if (!empty($permissions)) {
+        if ( ! empty($permissions)) {
             $link->permissions = $permissions;
             // dd($permissions);
         }
@@ -164,13 +173,14 @@ class AdminMenuController extends AdminController
         return back()->withInput()->withErrors($link->getErrors());
     }
 
+
     public function postNewItem(Request $request, $menu_id, $id = 0)
     {
-        $this->menulink->menu_id = $menu_id;
+        $this->menulink->menu_id   = $menu_id;
         $this->menulink->parent_id = $request->get('parent_id', 0);
-        $this->menulink->title = $request->get('title');
-        $this->menulink->url = $request->get('url');
-        $permissions = [];
+        $this->menulink->title     = $request->get('title');
+        $this->menulink->url       = $request->get('url');
+        $permissions               = [];
 
         if ($request->has('groups')) {
             $permissions['groups'] = $request->get('groups');
@@ -180,7 +190,7 @@ class AdminMenuController extends AdminController
         }
         //dd(json_encode($permissions));
 
-        if (!empty($permissions)) {
+        if ( ! empty($permissions)) {
             $this->menulink->permissions = json_encode($permissions);
         }
 
@@ -192,6 +202,7 @@ class AdminMenuController extends AdminController
 
         return redirect()->back()->withInput()->withErrors($this->menulink->getErrors());
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -205,8 +216,10 @@ class AdminMenuController extends AdminController
         $this->data['menu'] = $this->menu->findOrFail($id);
         $this->setTitle('Edit Menu: '.$this->data['menu']->title);
         $this->crumb('Menus', route('get.admin.menu.index'))->crumb($this->data['menu']->title);
+
         return $this->setContent('menus::admin.menu.edit', $this->data);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -217,12 +230,12 @@ class AdminMenuController extends AdminController
      */
     public function postEdit($id)
     {
-        $Menu = $this->menu->findOrFail($id);
+        $Menu                  = $this->menu->findOrFail($id);
         $Menu::$rules['title'] = 'required|min:3|unique:menus,title,'.$Menu->id;
-        $Menu::$rules['slug'] = 'required_with:title|min:3|alpha_dash|unique:menus,slug,'.$Menu->id;
+        $Menu::$rules['slug']  = 'required_with:title|min:3|alpha_dash|unique:menus,slug,'.$Menu->id;
 
         $Menu->title = $request->get('title');
-        $Menu->slug = $request->get('slug');
+        $Menu->slug  = $request->get('slug');
 
         if ($Menu->save()) {
             // Save associated tags and menus
@@ -232,9 +245,10 @@ class AdminMenuController extends AdminController
         return redirect()->back()->withInput()->withErrors($Menu->getErrors());
     }
 
+
     public function postSort(Request $request)
     {
-        $order = json_decode($request->get('pages'), true);
+        $order   = json_decode($request->get('pages'), true);
         $menu_id = $request->get('menu_id');
 
         foreach ($order as $key => $value) {
@@ -244,6 +258,7 @@ class AdminMenuController extends AdminController
 
         return response()->json(['status' => 'ok']);
     }
+
 
     /**
      * Remove the specified resource from storage.

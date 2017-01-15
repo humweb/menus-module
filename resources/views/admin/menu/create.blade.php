@@ -21,7 +21,9 @@
 
 
     <script>
-        $(function () { $('[name=title]').slugify() })
+        $(function () {
+            $('[name=title]').slugify()
+        })
     </script>
 
 @show

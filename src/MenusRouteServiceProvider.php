@@ -2,8 +2,8 @@
 
 namespace Humweb\Menus;
 
-use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
+use Illuminate\Routing\Router;
 
 class MenusRouteServiceProvider extends RouteServiceProvider
 {
@@ -15,6 +15,7 @@ class MenusRouteServiceProvider extends RouteServiceProvider
      * @var string
      */
     protected $namespace = 'Humweb\Menus\Controllers';
+
 
     /**
      * Define the routes for the application.

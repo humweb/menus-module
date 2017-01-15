@@ -54,16 +54,16 @@
     </div>
 
     <script type="text/javascript">
-        $(function(){
-            $('#page_toggle').click(function(e) {
+        $(function () {
+            $('#page_toggle').click(function (e) {
                 e.preventDefault();
                 $('#page-link').fadeToggle('fast');
             });
-            $('#pages').on('change blur',function() {
+            $('#pages').on('change blur', function () {
                 $('#url').val($(':selected', this).val());
                 $('#page-link').fadeOut('fast');
             });
-            $('#slug').on('change', function(e){
+            $('#slug').on('change', function (e) {
                 $('#slug_uri').text(this.value);
             });
         });

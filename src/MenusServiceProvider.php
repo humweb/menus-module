@@ -10,31 +10,32 @@ class MenusServiceProvider extends ModuleBaseProvider
 
         // Users
         'menu.create' => [
-            'name' => 'Create Menus',
+            'name'        => 'Create Menus',
             'description' => 'Create Menu.',
         ],
-        'menu.edit' => [
-            'name' => 'Edit Menus',
+        'menu.edit'   => [
+            'name'        => 'Edit Menus',
             'description' => 'Edit Menu.',
         ],
-        'menu.list' => [
-            'name' => 'List Menus',
+        'menu.list'   => [
+            'name'        => 'List Menus',
             'description' => 'List Menu.',
         ],
         'menu.delete' => [
-            'name' => 'Delete Menus',
+            'name'        => 'Delete Menus',
             'description' => 'Delete pages.',
         ],
     ];
 
     protected $moduleMeta = [
-        'name' => 'Menus',
-        'slug' => 'menus',
+        'name'    => 'Menus',
+        'slug'    => 'menus',
         'version' => '',
-        'author' => '',
-        'email' => '',
+        'author'  => '',
+        'email'   => '',
         'website' => '',
     ];
+
 
     /**
      * Bootstrap the application events.
@@ -47,32 +48,35 @@ class MenusServiceProvider extends ModuleBaseProvider
         $this->publishViews();
     }
 
+
     public function register()
     {
     }
+
 
     public function getAdminMenu()
     {
         return [
             'Structure' => [
                 [
-                    'label' => 'Menus',
-                    'icon' => '<i class="fa fa-navicon" ></i>',
-                    'url' => route('get.admin.menu.index'),
+                    'label'    => 'Menus',
+                    'icon'     => '<i class="fa fa-navicon" ></i>',
+                    'url'      => route('get.admin.menu.index'),
                     'children' => [
                         [
                             'label' => 'List',
-                            'url' => route('get.admin.menu.index'),
+                            'url'   => route('get.admin.menu.index'),
                         ],
                         [
                             'label' => 'New Menu',
-                            'url' => route('get.admin.menu.create'),
+                            'url'   => route('get.admin.menu.create'),
                         ],
                     ],
                 ],
             ],
         ];
     }
+
 
     /**
      * Get the services provided by the provider.

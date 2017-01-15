@@ -1,4 +1,5 @@
 <?php namespace Humweb\Menus\Presenters;
+
 /**
  * StaffSidebar
  *
@@ -13,6 +14,7 @@ interface PresenterInterface
      * @return string
      */
     public function itemIcon($menu);
+
 
     /**
      * @param       $attr

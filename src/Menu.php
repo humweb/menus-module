@@ -1,7 +1,7 @@
 <?php namespace Humweb\Menus;
 
-use Humweb\Menus\Presenters\PresenterInterface;
 use Humweb\Menus\Presenters\Bootstrap;
+use Humweb\Menus\Presenters\PresenterInterface;
 
 /**
  * Class Menu
@@ -16,6 +16,7 @@ class Menu
 
     protected $labelAttribute = 'title';
 
+
     /**
      * Menu constructor
      *
@@ -25,10 +26,11 @@ class Menu
      */
     public function __construct($items = [], PresenterInterface $presenter = null)
     {
-        $this->request = app()->make('request');
-        $this->items = $items;
+        $this->request   = app()->make('request');
+        $this->items     = $items;
         $this->presenter = $presenter ?: new Bootstrap();
     }
+
 
     /**
      * Render Menu
@@ -39,6 +41,7 @@ class Menu
     {
         return $this->recurseMenu($this->items, 0);
     }
+
 
     /**
      * Build and renders menu
@@ -56,11 +59,11 @@ class Menu
         $level++;
 
         foreach ($menu as $menu_section => $menus) {
-            $menus['label'] = $this->getLabel($menus, $menu_section);
+            $menus['label']    = $this->getLabel($menus, $menu_section);
             $menus['selected'] = $this->getSelected($menus, $menu_section);
-            $menus['icon'] = $this->getPresenter()->itemIcon($menus);
-            $menus['url'] = $this->getUrl($menus);
-            $menus['level'] = $level;
+            $menus['icon']     = $this->getPresenter()->itemIcon($menus);
+            $menus['url']      = $this->getUrl($menus);
+            $menus['level']    = $level;
 
             $hasDivider = isset($menus['divider']);
 
@@ -82,7 +85,6 @@ class Menu
         }
 
         return $str;
-
     }
 
 
@@ -120,6 +122,32 @@ class Menu
     }
 
 
+    public function getPresenter()
+    {
+        if (empty($this->presenter)) {
+            throw new \Exception('Presenter not set.');
+        }
+
+        return $this->presenter;
+    }
+
+
+    /**
+     * Sets the presenter to be used for menu
+     *
+     * @param PresenterInterface $presenter
+     *
+     * @return $this
+     *
+     */
+    public function setPresenter(PresenterInterface $presenter)
+    {
+        $this->presenter = $presenter;
+
+        return $this;
+    }
+
+
     /**
      * Get url for link defaults to hash
      *
@@ -135,6 +163,7 @@ class Menu
 
         return isset($item['url']) ? $item['url'] : '#';
     }
+
 
     /**
      * Check if menu exists
@@ -161,30 +190,6 @@ class Menu
         return empty($this->items[$name]);
     }
 
-    /**
-     * Sets the presenter to be used for menu
-     *
-     * @param PresenterInterface $presenter
-     *
-     * @return $this
-     *
-     */
-    public function setPresenter(PresenterInterface $presenter)
-    {
-        $this->presenter = $presenter;
-
-        return $this;
-    }
-
-
-    public function getPresenter()
-    {
-        if (empty($this->presenter)) {
-            throw new \Exception('Presenter not set.');
-        }
-
-        return $this->presenter;
-    }
 
     /**
      * @param string $labelAttribute

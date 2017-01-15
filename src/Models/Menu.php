@@ -6,13 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
+    public static $rules = [];
+    /**
+     * Disable updated_at and created_at on table.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
     /**
      * Define the table name.
      *
      * @var string
      */
     protected $table = 'menus';
-
     /**
      * The attributes that aren't mass assignable.
      *
@@ -20,19 +26,6 @@ class Menu extends Model
      */
     protected $guarded = array();
 
-    public static $rules = [];
-
-    /**
-     * Disable updated_at and created_at on table.
-     *
-     * @var bool
-     */
-    public $timestamps = false;
-
-    public function links()
-    {
-        return $this->hasMany(MenuItem::class, 'menu_id');
-    }
 
     /**
      * Get flat array of groups.
@@ -43,6 +36,7 @@ class Menu extends Model
     {
         return static::lists('title', 'id');
     }
+
 
     /**
      * Get group by..
@@ -55,5 +49,11 @@ class Menu extends Model
     public static function findBySlug($value)
     {
         return static::where('slug', $value)->first();
+    }
+
+
+    public function links()
+    {
+        return $this->hasMany(MenuItem::class, 'menu_id');
     }
 }

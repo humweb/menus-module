@@ -32,17 +32,18 @@
         <script src="{{ asset('js/jquery.nestable.js') }}"></script>
 
         <script>
-            $(function(){
-                var updateOutput = function(e){
+            $(function () {
+                var updateOutput = function (e) {
 
                     var list = e.length ? e : $(e.target), output = list.data('output');
                     if (window.JSON) {
                         var data = {
                             _token: '{{ Session::token() }}',
                             menu_id: '{{ $menu_id }}',
-                            pages:window.JSON.stringify(list.nestable('serialize'))
+                            pages: window.JSON.stringify(list.nestable('serialize'))
                         };
-                        $.post('/admin/menus/sort', data, function(){});
+                        $.post('/admin/menus/sort', data, function () {
+                        });
                     } else {
                         output.val('JSON browser support required for this demo.');
                     }
