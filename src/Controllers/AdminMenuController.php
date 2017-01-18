@@ -3,8 +3,8 @@
 namespace Humweb\Menus\Controllers;
 
 use Humweb\Core\Http\Controllers\AdminController;
-use Humweb\Menus\Models\MenuLinkModel;
-use Humweb\Menus\Models\MenuModel;
+use Humweb\Menus\Models\Menu;
+use Humweb\Menus\Models\MenuItem;
 use Humweb\Pages\Repositories\DbPageRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -24,8 +24,8 @@ class AdminMenuController extends AdminController
             $this->page = $page;
         }
 
-        $this->menu     = new MenuModel();
-        $this->menulink = new MenuLinkModel();
+        $this->menu     = new Menu();
+        $this->menulink = new MenuItem();
         //        $this->setTitle('Menus');
     }
 
