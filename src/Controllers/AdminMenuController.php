@@ -7,6 +7,7 @@ use Humweb\Menus\Models\Menu;
 use Humweb\Menus\Models\MenuItem;
 use Humweb\Pages\Repositories\DbPageRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class AdminMenuController extends AdminController
 {
@@ -159,7 +160,6 @@ class AdminMenuController extends AdminController
 
         if ( ! empty($permissions)) {
             $link->permissions = $permissions;
-            // dd($permissions);
         }
 
         // dd(json_encode($permissions));
@@ -195,7 +195,7 @@ class AdminMenuController extends AdminController
         }
 
         if ($this->menulink->save()) {
-            \Cache::forget('menu_links_'.$menu_id);
+            Cache::forget('menu_links_'.$menu_id);
 
             return redirect()->route('get.admin.menuitem.index', array($menu_id))->with('success', 'Menu has been created');
         }
