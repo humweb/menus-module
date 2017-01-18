@@ -27,7 +27,6 @@ class AdminMenuController extends AdminController
 
         $this->menu     = new Menu();
         $this->menulink = new MenuItem();
-        //        $this->setTitle('Menus');
     }
 
 
