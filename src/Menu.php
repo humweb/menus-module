@@ -74,7 +74,7 @@ class Menu
             // Has children
             if (isset($menus['children']) && is_array($menus['children'])) {
                 $children = $this->recurseMenu($menus['children'], $level);
-                $str .= $this->getPresenter()->itemWithChildren($menus, $children, $level);
+                $str      .= $this->getPresenter()->itemWithChildren($menus, $children, $level);
             } else {
                 $str .= $this->getPresenter()->item($menus, $level);
             }

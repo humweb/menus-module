@@ -19,8 +19,8 @@ class Bootstrap implements PresenterInterface
         $class    = ($attr['level'] > 1) ? ' dropdown-submenu' : '';
         $caret    = ($attr['level'] <= 1) ? ' <span class="caret"></span>' : '';
         $str      = '<li class="dropdown'.$class.'">'.'<a href="'.$attr['url'].'" class="dropdown-toggle" data-toggle="dropdown">'.$attr['icon'].$attr['label'].$caret.'</a>'.'<ul class="dropdown-menu">';
-        $str .= $children;
-        $str .= '</ul></li>';
+        $str      .= $children;
+        $str      .= '</ul></li>';
 
         return $str;
     }
