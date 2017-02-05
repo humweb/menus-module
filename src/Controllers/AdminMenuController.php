@@ -98,7 +98,7 @@ class AdminMenuController extends AdminController
     {
         $this->data['link']        = $this->menulink->findOrFail($id);
         $this->data['user_groups'] = \DB::table('groups')->pluck('name');
-        $this->data['pages']       = $this->page->build_select();
+        $this->data['pages']       = $this->page->build_select(true);
 
         // dd($this->data['link']->permissions);
 
@@ -131,7 +131,7 @@ class AdminMenuController extends AdminController
     {
         $this->data['menu_id']     = $id;
         $this->data['parent_id']   = $parent_id ?: 0;
-        $this->data['pages']       = $this->page->build_select();
+        $this->data['pages']       = $this->page->build_select(true);
         $this->data['user_groups'] = \DB::table('groups')->pluck('name', 'name');
         $this->setTitle('Create Menu Item');
         $this->crumb('Menus', route('get.admin.menu.index'))->crumb('Create');
