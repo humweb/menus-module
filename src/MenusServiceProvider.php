@@ -64,11 +64,11 @@ class MenusServiceProvider extends ModuleBaseProvider
                     'url'      => route('get.admin.menu.index'),
                     'children' => [
                         [
-                            'label' => 'List',
+                            'label' => 'Manage',
                             'url'   => route('get.admin.menu.index'),
                         ],
                         [
-                            'label' => 'New Menu',
+                            'label' => 'Create',
                             'url'   => route('get.admin.menu.create'),
                         ],
                     ],
