@@ -100,8 +100,6 @@ class AdminMenuController extends AdminController
         $this->data['user_groups'] = \DB::table('groups')->pluck('name');
         $this->data['pages']       = $this->page->build_select(true);
 
-        // dd($this->data['link']->permissions);
-
         // Group permissions
         if ( ! empty($this->data['link']->permissions->groups)) {
             $vals                       = array_values($this->data['link']->permissions->groups);
@@ -161,8 +159,6 @@ class AdminMenuController extends AdminController
             $link->permissions = $permissions;
         }
 
-        // dd(json_encode($permissions));
-
         if ($link->save()) {
             \Cache::forget('menu_links_'.$link->menu_id);
 
@@ -187,7 +183,7 @@ class AdminMenuController extends AdminController
         if ($request->has('users')) {
             $permissions['users'] = $request->get('users');
         }
-        //dd(json_encode($permissions));
+
 
         if ( ! empty($permissions)) {
             $this->menulink->permissions = json_encode($permissions);
