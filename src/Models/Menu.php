@@ -34,7 +34,7 @@ class Menu extends Model
      */
     public static function getList()
     {
-        return static::lists('title', 'id');
+        return static::pluck('title', 'id');
     }
 
 
