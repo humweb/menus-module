@@ -35,7 +35,7 @@ class MenuItemsController extends AdminController
             $item->delete();
             Cache::forget('menu_links_'.$menuId);
 
-            return redirect()->route('get.admin.menuitem.index', array($menuId))->with('success', 'Menu removed menu item.');
+            return redirect()->route('get.admin.menuitem.index', array($menuId))->with('success', 'Menu item removed.');
         }
     }
 
