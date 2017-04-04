@@ -47,12 +47,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(array('prefix' => 'admin/menus/{id}', 'where' => array('id', '[0-9]+')), function () {
         Route::post('create/{parentid?}', [
             'as'   => 'post.admin.menuitem.create',
-            'uses' => 'MenuItemController@postNewitem',
+            'uses' => 'MenuItemsController@postNewitem',
         ]);
 
         Route::get('create/{parentid?}', [
             'as'   => 'get.admin.menuitem.create',
-            'uses' => 'MenuItemController@getNewitem',
+            'uses' => 'MenuItemsController@getNewitem',
         ]);
 
         Route::post('edit/{iid}', [
@@ -62,22 +62,22 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('edit/{iid}', [
             'as'   => 'get.admin.menuitem.edit',
-            'uses' => 'MenuItemController@getEditItem',
+            'uses' => 'MenuItemsController@getEditItem',
         ]);
 
         Route::get('delete/{iid}', [
             'as'   => 'get.admin.menuitem.delete',
-            'uses' => 'MenuItemController@getDeleteItem',
+            'uses' => 'MenuItemsController@getDeleteItem',
         ]);
 
         Route::post('delete/{iid}', [
             'as'   => 'post.admin.menuitem.delete',
-            'uses' => 'MenuItemController@postDeleteitem',
+            'uses' => 'MenuItemsController@postDeleteitem',
         ]);
 
         Route::get('/', [
             'as'   => 'get.admin.menuitem.index',
-            'uses' => 'MenuItemController@getItems',
+            'uses' => 'MenuItemsController@getItems',
         ]);
     });
 });
