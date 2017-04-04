@@ -3,16 +3,13 @@
 namespace Humweb\Menus\Controllers;
 
 use Humweb\Core\Http\Controllers\AdminController;
-use Humweb\Menus\Models\Menu;
 use Humweb\Menus\Models\MenuItem;
 use Humweb\Pages\Repositories\DbPageRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
-class AdminMenuController extends AdminController
+class MenuItemsController extends AdminController
 {
-    protected $menu;
-    protected $menulink;
 
     protected $data;
 
@@ -24,56 +21,19 @@ class AdminMenuController extends AdminController
         if ( ! empty($page)) {
             $this->page = $page;
         }
-
-        $this->menu     = new Menu();
-        $this->menulink = new MenuItem();
     }
 
 
-    public function getCreate()
+    public function getDeleteItem(Request $request, $menuId, $id)
     {
-        $this->setTitle('Create Menu');
-        $this->crumb('Menus', route('get.admin.menu.index'));
+        if ($item = MenuItem::find($id)) {
 
-        return $this->setContent('menus::admin.menu.create', $this->data);
-    }
-
-
-    public function postCreate(Request $request)
-    {
-        $this->menu->title = $request->get('title');
-        $this->menu->slug  = $request->get('slug');
-
-        //$Menu = $this->menu->create($data);
-
-        if ($this->menu->save()) {
-            return redirect()->route('get.admin.menu.index')->with('success', 'Menu has been created');
-        }
-
-        return redirect()->back()->withInput()->withErrors($this->menu->getErrors());
-    }
-
-
-    public function getIndex()
-    {
-        $this->setTitle('Menus');
-        $this->crumb('Menus');
-
-        $this->data['menus'] = $this->menu->orderBy('title')->get();
-
-        return $this->setContent('menus::admin.menu.index', $this->data);
-    }
-
-
-    public function getDeleteItem(Request $request, $menu_id, $id)
-    {
-        if ($item = $this->menulink->find($id)) {
-
-            // Shift childrens parent_id's up one
-            $this->menulink->where('parent_id', '=', $id)->update(array('parent_id' => $item->parent_id));
+            // Shift children up one
+            $this->menulink->where('parent_id', '=', $id)->update(['parent_id' => $item->parent_id]);
             $item->delete();
+            \Cache::forget('menu_links_'.$menuId);
 
-            return redirect()->route('get.admin.menuitem.index', array($menu_id))->with('success', 'Menu removed menu item.');
+            return redirect()->route('get.admin.menuitem.index', array($menuId))->with('success', 'Menu removed menu item.');
         }
     }
 
@@ -81,12 +41,12 @@ class AdminMenuController extends AdminController
     public function getItems($id)
     {
 
-        empty($id) and dd('Must have a menu ID');
         $this->setTitle('Menu Items');
+
         $this->data['menu_id'] = $id;
-        $this->data['items']   = $this->menulink->orderBy('order', 'desc')->get();
-        $this->data['content'] = $this->menulink->build_admin_tree($id);
-        $this->data['tree']    = $this->menulink->tree($id);
+        $this->data['items']   = MenuItem::orderBy('order', 'desc')->get();
+        $this->data['content'] = (new MenuItem())->build_admin_tree($id);
+        $this->data['tree']    = MenuItem::tree($id);
 
         $this->crumb('Menus', route('get.admin.menu.index'))->crumb('Menu Items');
 
@@ -96,7 +56,7 @@ class AdminMenuController extends AdminController
 
     public function getEditItem(Request $request, $table_id, $id)
     {
-        $this->data['link']        = $this->menulink->findOrFail($id);
+        $this->data['link']        = MenuItem::findOrFail($id);
         $this->data['user_groups'] = \DB::table('groups')->pluck('name');
         $this->data['pages']       = $this->page->build_select(true);
 
@@ -140,7 +100,7 @@ class AdminMenuController extends AdminController
 
     public function postEditItem(Request $request, $menu_id, $id = 0)
     {
-        $link = $this->menulink->findOrFail($id);
+        $link = MenuItem::findOrFail($id);
 
         $link->menu_id   = $request->get('menu_id');
         $link->parent_id = $request->get('parent_id', 0);
@@ -184,7 +144,6 @@ class AdminMenuController extends AdminController
             $permissions['users'] = $request->get('users');
         }
 
-
         if ( ! empty($permissions)) {
             $this->menulink->permissions = json_encode($permissions);
         }
@@ -196,48 +155,6 @@ class AdminMenuController extends AdminController
         }
 
         return redirect()->back()->withInput()->withErrors($this->menulink->getErrors());
-    }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function getEdit($id)
-    {
-        $this->data['menu'] = $this->menu->findOrFail($id);
-        $this->setTitle('Edit Menu: '.$this->data['menu']->title);
-        $this->crumb('Menus', route('get.admin.menu.index'))->crumb($this->data['menu']->title);
-
-        return $this->setContent('menus::admin.menu.edit', $this->data);
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function postEdit($id)
-    {
-        $Menu                  = $this->menu->findOrFail($id);
-        $Menu::$rules['title'] = 'required|min:3|unique:menus,title,'.$Menu->id;
-        $Menu::$rules['slug']  = 'required_with:title|min:3|alpha_dash|unique:menus,slug,'.$Menu->id;
-
-        $Menu->title = $request->get('title');
-        $Menu->slug  = $request->get('slug');
-
-        if ($Menu->save()) {
-            // Save associated tags and menus
-            return redirect()->route('get.admin.menu.index')->with('success', 'The item has been updated.');
-        }
-
-        return redirect()->back()->withInput()->withErrors($Menu->getErrors());
     }
 
 
@@ -254,26 +171,4 @@ class AdminMenuController extends AdminController
         return response()->json(['status' => 'ok']);
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        $post = $this->menu->find($id);
-
-        if ($post->exists()) {
-            $post->menus()->detach();
-            $post->tags()->detach();
-            $post->delete();
-
-            return redirect()->route('get.admin.menu.index')->with('success', 'The item has been deleted.');
-        }
-
-        return redirect()->route('get.admin.menu.index')->withErrors('The item you tried to delete does not exist.');
-    }
 }

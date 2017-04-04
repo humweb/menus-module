@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Menu extends Model
 {
     public static $rules = [];
+
     /**
      * Disable updated_at and created_at on table.
      *

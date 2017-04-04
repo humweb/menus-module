@@ -3,21 +3,21 @@ Route::group(['middleware' => 'auth'], function () {
     //GET
     Route::get('admin/menus/', [
         'as'          => 'get.admin.menu.index',
-        'uses'        => 'AdminMenuController@getIndex',
+        'uses'        => 'MenuController@getIndex',
         'middleware'  => 'allow.only',
         'permissions' => ['menu.list'],
     ]);
 
     Route::get('admin/menus/create', [
         'as'          => 'get.admin.menu.create',
-        'uses'        => 'AdminMenuController@getCreate',
+        'uses'        => 'MenuController@getCreate',
         'middleware'  => 'allow.only',
         'permissions' => ['menu.create'],
     ]);
 
     Route::get('admin/menus/edit/{id}', [
         'as'          => 'get.admin.menu.edit',
-        'uses'        => 'AdminMenuController@getEdit',
+        'uses'        => 'MenuController@getEdit',
         'middleware'  => 'allow.only',
         'permissions' => ['menu.edit'],
     ]);
@@ -25,21 +25,21 @@ Route::group(['middleware' => 'auth'], function () {
     //POST
     Route::post('admin/menus/create', [
         'as'          => 'post.admin.menu.create',
-        'uses'        => 'AdminMenuController@postCreate',
+        'uses'        => 'MenuController@postCreate',
         'middleware'  => 'allow.only',
         'permissions' => ['menu.create'],
     ]);
 
     Route::post('admin/menus/edit/{id}', [
         'as'          => 'post.admin.menu.edit',
-        'uses'        => 'AdminMenuController@postEdit',
+        'uses'        => 'MenuController@postEdit',
         'middleware'  => 'allow.only',
         'permissions' => ['menu.edit'],
     ]);
 
     Route::post('admin/menus/sort', [
         'as'          => 'post.admin.menu.sort',
-        'uses'        => 'AdminMenuController@postSort',
+        'uses'        => 'MenuController@postSort',
         'middleware'  => 'allow.only',
         'permissions' => ['menu.edit'],
     ]);
@@ -47,37 +47,37 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(array('prefix' => 'admin/menus/{id}', 'where' => array('id', '[0-9]+')), function () {
         Route::post('create/{parentid?}', [
             'as'   => 'post.admin.menuitem.create',
-            'uses' => 'AdminMenuController@postNewitem',
+            'uses' => 'MenuItemController@postNewitem',
         ]);
 
         Route::get('create/{parentid?}', [
             'as'   => 'get.admin.menuitem.create',
-            'uses' => 'AdminMenuController@getNewitem',
+            'uses' => 'MenuItemController@getNewitem',
         ]);
 
         Route::post('edit/{iid}', [
             'as'   => 'post.admin.menuitem.edit',
-            'uses' => 'AdminMenuController@postEditItem',
+            'uses' => 'MenuController@postEditItem',
         ]);
 
         Route::get('edit/{iid}', [
             'as'   => 'get.admin.menuitem.edit',
-            'uses' => 'AdminMenuController@getEditItem',
+            'uses' => 'MenuItemController@getEditItem',
         ]);
 
         Route::get('delete/{iid}', [
             'as'   => 'get.admin.menuitem.delete',
-            'uses' => 'AdminMenuController@getDeleteItem',
+            'uses' => 'MenuItemController@getDeleteItem',
         ]);
 
         Route::post('delete/{iid}', [
             'as'   => 'post.admin.menuitem.delete',
-            'uses' => 'AdminMenuController@postDeleteitem',
+            'uses' => 'MenuItemController@postDeleteitem',
         ]);
 
         Route::get('/', [
             'as'   => 'get.admin.menuitem.index',
-            'uses' => 'AdminMenuController@getItems',
+            'uses' => 'MenuItemController@getItems',
         ]);
     });
 });
