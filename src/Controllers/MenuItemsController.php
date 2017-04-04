@@ -2,11 +2,13 @@
 
 namespace Humweb\Menus\Controllers;
 
+use Humweb\Auth\Groups\Group;
 use Humweb\Core\Http\Controllers\AdminController;
 use Humweb\Menus\Models\MenuItem;
 use Humweb\Pages\Repositories\DbPageRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class MenuItemsController extends AdminController
 {
@@ -31,7 +33,7 @@ class MenuItemsController extends AdminController
             // Shift children up one
             $this->menulink->where('parent_id', '=', $id)->update(['parent_id' => $item->parent_id]);
             $item->delete();
-            \Cache::forget('menu_links_'.$menuId);
+            Cache::forget('menu_links_'.$menuId);
 
             return redirect()->route('get.admin.menuitem.index', array($menuId))->with('success', 'Menu removed menu item.');
         }
@@ -57,7 +59,7 @@ class MenuItemsController extends AdminController
     public function getEditItem(Request $request, $table_id, $id)
     {
         $this->data['link']        = MenuItem::findOrFail($id);
-        $this->data['user_groups'] = \DB::table('groups')->pluck('name');
+        $this->data['user_groups'] = Group::pluck('name');
         $this->data['pages']       = $this->page->build_select(true);
 
         // Group permissions
@@ -90,7 +92,7 @@ class MenuItemsController extends AdminController
         $this->data['menu_id']     = $id;
         $this->data['parent_id']   = $parent_id ?: 0;
         $this->data['pages']       = $this->page->build_select(true);
-        $this->data['user_groups'] = \DB::table('groups')->pluck('name', 'name');
+        $this->data['user_groups'] = Group::pluck('name', 'name');
         $this->setTitle('Create Menu Item');
         $this->crumb('Menus', route('get.admin.menu.index'))->crumb('Create');
 
@@ -120,7 +122,7 @@ class MenuItemsController extends AdminController
         }
 
         if ($link->save()) {
-            \Cache::forget('menu_links_'.$link->menu_id);
+            Cache::forget('menu_links_'.$link->menu_id);
 
             return redirect()->route('get.admin.menuitem.index', array($link->menu_id))->with('success', 'Menu has been item has been saved.');
         }
@@ -166,7 +168,7 @@ class MenuItemsController extends AdminController
         foreach ($order as $key => $value) {
             $this->menulink->reorder($menu_id, $order);
         }
-        \Cache::forget('menu_links_'.$menu_id);
+        Cache::forget('menu_links_'.$menu_id);
 
         return response()->json(['status' => 'ok']);
     }
