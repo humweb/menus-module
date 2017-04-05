@@ -8,7 +8,6 @@ use Humweb\Menus\Models\MenuItem;
 use Humweb\Pages\Repositories\DbPageRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 class MenuItemsController extends AdminController
 {
@@ -31,12 +30,14 @@ class MenuItemsController extends AdminController
         if ($item = MenuItem::find($id)) {
 
             // Shift children up one
-            $this->menulink->where('parent_id', '=', $id)->update(['parent_id' => $item->parent_id]);
+            MenuItem::where('parent_id', '=', $id)->update(['parent_id' => $item->parent_id]);
             $item->delete();
             Cache::forget('menu_links_'.$menuId);
 
-            return redirect()->route('get.admin.menuitem.index', array($menuId))->with('success', 'Menu item removed.');
+            return redirect()->route('get.admin.menuitem.index', [$menuId])->with('success', 'Menu item removed.');
         }
+
+        return back()->with('info', 'Menu item not found.');
     }
 
 
@@ -131,13 +132,15 @@ class MenuItemsController extends AdminController
     }
 
 
-    public function postNewItem(Request $request, $menu_id, $id = 0)
+    public function postNewItem(Request $request, $menuId, $id = 0)
     {
-        $this->menulink->menu_id   = $menu_id;
-        $this->menulink->parent_id = $request->get('parent_id', 0);
-        $this->menulink->title     = $request->get('title');
-        $this->menulink->url       = $request->get('url');
-        $permissions               = [];
+        $menuItemData = [
+            'menu_id'   => $menuId,
+            'parent_id' => $request->get('parent_id', 0),
+            'title'     => $request->get('title'),
+            'url'       => $request->get('url'),
+        ];
+        $permissions  = [];
 
         if ($request->has('groups')) {
             $permissions['groups'] = $request->get('groups');
@@ -147,16 +150,17 @@ class MenuItemsController extends AdminController
         }
 
         if ( ! empty($permissions)) {
-            $this->menulink->permissions = json_encode($permissions);
+            $menuItemData['permissions'] = json_encode($permissions);
         }
 
-        if ($this->menulink->save()) {
-            Cache::forget('menu_links_'.$menu_id);
+        $menuItem = MenuItem::create($menuItemData);
+        if (! is_null($menuItem)) {
+            Cache::forget('menu_links_'.$menuId);
 
-            return redirect()->route('get.admin.menuitem.index', array($menu_id))->with('success', 'Menu has been created');
+            return redirect()->route('get.admin.menuitem.index', array($menuId))->with('success', 'Menu has been created');
         }
 
-        return redirect()->back()->withInput()->withErrors($this->menulink->getErrors());
+        return back();
     }
 
 
