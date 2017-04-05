@@ -2,12 +2,13 @@
 
 namespace Humweb\Menus\Models;
 
+use Humweb\Core\Data\Traits\SluggableTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
-    public static $rules = [];
-
+    use SluggableTrait;
+    
     /**
      * Disable updated_at and created_at on table.
      *

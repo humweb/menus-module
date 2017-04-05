@@ -7,7 +7,7 @@ use Humweb\Menus\Models\Menu;
 use Humweb\Menus\Models\MenuItem;
 use Humweb\Pages\Repositories\DbPageRepositoryInterface;
 use Illuminate\Http\Request;
-
+use Humweb\Menus\Requests\MenuSaveRequest;
 class MenuController extends AdminController
 {
     protected $menu;
@@ -34,7 +34,7 @@ class MenuController extends AdminController
         $this->setTitle('Menus');
         $this->crumb('Menus');
 
-        $this->data['menus'] = $this->menu->orderBy('title')->get();
+        $this->data['menus'] = Menu::orderBy('title')->get();
 
         return $this->setContent('menus::admin.menu.index', $this->data);
     }
@@ -49,7 +49,7 @@ class MenuController extends AdminController
     }
 
 
-    public function postCreate(Request $request)
+    public function postCreate(MenuSaveRequest $request)
     {
         $menu = Menu::create($request->intersect(['title', 'slug']));
 
@@ -85,13 +85,8 @@ class MenuController extends AdminController
      *
      * @return Response
      */
-    public function postEdit($id)
+    public function postEdit(MenuSaveRequest $request, $id)
     {
-        $this->validate($request, [
-            'title' => 'required|min:3|unique:menus,title,'.$id,
-            'slug'  => 'required_with:title|min:3|alpha_dash|unique:menus,slug,'.$id
-        ]);
-
         $menu = Menu::findOrFail($id);
         $menu->fill($request->intercect(['title', 'slug']));
 

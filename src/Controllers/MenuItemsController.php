@@ -8,6 +8,7 @@ use Humweb\Menus\Models\MenuItem;
 use Humweb\Pages\Repositories\DbPageRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Humweb\Menus\Requests\MenuItemSaveRequest;
 
 class MenuItemsController extends AdminController
 {
@@ -101,7 +102,7 @@ class MenuItemsController extends AdminController
     }
 
 
-    public function postEditItem(Request $request, $menu_id, $id = 0)
+    public function postEditItem(MenuItemSaveRequest $request, $menu_id, $id = 0)
     {
         $link = MenuItem::findOrFail($id);
 
@@ -132,7 +133,7 @@ class MenuItemsController extends AdminController
     }
 
 
-    public function postNewItem(Request $request, $menuId, $id = 0)
+    public function postNewItem(MenuItemSaveRequest $request, $menuId, $id = 0)
     {
         $menuItemData = [
             'menu_id'   => $menuId,

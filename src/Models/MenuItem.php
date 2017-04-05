@@ -17,11 +17,6 @@ use Illuminate\Database\Eloquent\Model;
 class MenuItem extends Model
 {
 
-    public static $rules = [
-        'title'     => 'required|min:3',
-        'menu_id'   => 'required|numeric',
-        'published' => 'in:0,1',
-    ];
     /**
      * Disable updated_at and created_at on table.
      *
@@ -34,7 +29,7 @@ class MenuItem extends Model
      * @var string
      */
     protected $table    = 'menu_items';
-    protected $fillable = array('menu_id', 'title', 'url', 'content', 'permissions');
+    protected $fillable = ['menu_id', 'title', 'url', 'content', 'permissions'];
 
 
     /**
