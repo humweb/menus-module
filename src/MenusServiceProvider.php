@@ -43,6 +43,7 @@ class MenusServiceProvider extends ModuleBaseProvider
     public function boot()
     {
         $this->app['modules']->put('menus', $this);
+        $this->loadMigrations();
         $this->loadLang();
         $this->loadViews();
         $this->publishViews();
