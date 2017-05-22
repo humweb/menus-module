@@ -1,6 +1,6 @@
 <?php namespace Humweb\Menus;
 
-use Humweb\Menus\Presenters\Bootstrap;
+use Humweb\Menus\Presenters\Bootstrap4;
 use Humweb\Menus\Presenters\PresenterInterface;
 
 /**
@@ -28,7 +28,7 @@ class Menu
     {
         $this->request   = app()->make('request');
         $this->items     = $items;
-        $this->presenter = $presenter ?: new Bootstrap();
+        $this->presenter = $presenter ?: new Bootstrap4();
     }
 
 
@@ -72,7 +72,7 @@ class Menu
             }
 
             // Has children
-            if (isset($menus['children']) && is_array($menus['children'])) {
+            if (isset($menus['children']) && is_array($menus['children']) && $level < 2) {
                 $children = $this->recurseMenu($menus['children'], $level);
                 $str      .= $this->getPresenter()->itemWithChildren($menus, $children, $level);
             } else {
