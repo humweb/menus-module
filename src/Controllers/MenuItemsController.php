@@ -50,7 +50,6 @@ class MenuItemsController extends AdminController
         $this->data['menu_id'] = $id;
         $this->data['items']   = MenuItem::orderBy('order', 'desc')->get();
         $this->data['content'] = (new MenuItem())->build_admin_tree($id);
-        $this->data['tree']    = MenuItem::tree($id);
 
         $this->crumb('Menus', route('get.admin.menu.index'))->crumb('Menu Items');
 
@@ -155,7 +154,7 @@ class MenuItemsController extends AdminController
         }
 
         $menuItem = MenuItem::create($menuItemData);
-        if (! is_null($menuItem)) {
+        if ( ! is_null($menuItem)) {
             Cache::forget('menu_links_'.$menuId);
 
             return redirect()->route('get.admin.menuitem.index', array($menuId))->with('success', 'Menu has been created');

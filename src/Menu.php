@@ -2,6 +2,7 @@
 
 use Humweb\Menus\Presenters\Bootstrap4;
 use Humweb\Menus\Presenters\PresenterInterface;
+use Illuminate\Support\Collection;
 
 /**
  * Class Menu
@@ -15,6 +16,7 @@ class Menu
     protected $request;
 
     protected $labelAttribute = 'title';
+    protected $childrenKey    = 'children';
 
 
     /**
@@ -37,9 +39,9 @@ class Menu
      *
      * @return string
      */
-    public function render()
+    public function render($level = 0)
     {
-        return $this->recurseMenu($this->items, 0);
+        return $this->recurseMenu($this->items, $level);
     }
 
 
@@ -72,8 +74,12 @@ class Menu
             }
 
             // Has children
-            if (isset($menus['children']) && is_array($menus['children']) && $level < 2) {
-                $children = $this->recurseMenu($menus['children'], $level);
+            if (isset($menus[$this->getChildrenKey()]) && $this->isCollection($menus[$this->getChildrenKey()])) {
+                $menus[$this->getChildrenKey()] = $menus[$this->getChildrenKey()]->toArray();
+            }
+
+            if (isset($menus[$this->getChildrenKey()]) && !empty($menus[$this->getChildrenKey()]) && $level < 2) {
+                $children = $this->recurseMenu($menus[$this->getChildrenKey()], $level);
                 $str      .= $this->getPresenter()->itemWithChildren($menus, $children, $level);
             } else {
                 $str .= $this->getPresenter()->item($menus, $level);
@@ -161,6 +167,9 @@ class Menu
             return route($item['route']);
         }
 
+        if (isset($item['uri'])) {
+            return url($item['uri']);
+        }
         return isset($item['url']) ? $item['url'] : '#';
     }
 
@@ -201,5 +210,33 @@ class Menu
         $this->labelAttribute = $labelAttribute;
 
         return $this;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getChildrenKey(): string
+    {
+        return $this->childrenKey;
+    }
+
+
+    /**
+     * @param string $childrenKey
+     *
+     * @return Menu
+     */
+    public function setChildrenKey(string $childrenKey): Menu
+    {
+        $this->childrenKey = $childrenKey;
+
+        return $this;
+    }
+
+
+    protected function isCollection($menu = null)
+    {
+        return $menu instanceof Collection;
     }
 }
