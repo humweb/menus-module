@@ -3,7 +3,7 @@
 namespace Humweb\Menus\Models;
 
 use Humweb\Menus\Menu;
-use Humweb\Menus\Presenters\Bootstrap;
+use Humweb\Menus\Presenters\Bootstrap4;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -39,7 +39,7 @@ class MenuItem extends Model
     {
         $output = '';
         $tree   = static::tree($id);
-        $menu   = new Menu($tree, new Bootstrap());
+        $menu   = new Menu($tree, new Bootstrap4());
 
         return $menu->render();
     }
@@ -65,12 +65,12 @@ class MenuItem extends Model
             foreach ($menulinks as $row) {
                 if (array_key_exists($row['parent_id'], $menulinks)) {
                     // Add this page to the children array of the parent page.
-                    $menulinks[$row['parent_id']]['children'][$row['id']] = &$menulinks[$row['id']];
+                    $menulinks[$row['parent_id']]['children'][$row['id']] = $menulinks[$row['id']];
                 }
 
                 // This is a root page.
                 if ($row['parent_id'] == 0) {
-                    $menu_array[$row['id']] = &$menulinks[$row['id']];
+                    $menu_array[$row['id']] = $menulinks[$row['id']];
                 }
             }
             \Cache::put('menu_links_'.$id, $menu_array, 60);
@@ -137,7 +137,7 @@ class MenuItem extends Model
 
         if (is_array($tree)) {
             foreach ($tree as $leaf) {
-                $output .= '<li class="dd-item dd3-item" data-id="'.$leaf['id'].'">'.'<div class="dd-handle dd3-handle">Handle</div>'.'<div class="dd3-content">'.$leaf['title'];
+                $output .= '<li class="dd-item" data-id="'.$leaf['id'].'">'.'<div class="dd-handle">Handle</div>'.'<div class="dd-content">'.$leaf['title'];
                 $output .= '<div class="actions">'.'<div class="btn-group btn-group-xs">'.'<a href="'.route('get.admin.menuitem.create',
                         [$id, $leaf['id']]).'"><i class="fa fa-plus"></i></a>'.'<a href="'.route('get.admin.menuitem.edit',
                         [$id, $leaf['id']]).'"><i class="fa fa-pencil"></i></a>'.'<a href="'.route('get.admin.menuitem.delete',

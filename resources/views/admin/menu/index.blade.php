@@ -5,14 +5,14 @@
 
 {{-- Content --}}
 @section('content')
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card card-default">
+        <div class="card-header">
             <div class="pull-right">
-                <a class="btn btn-sm btn-default" href="{{ route('get.admin.menu.create') }}" title="Add menu" data-toggle="tooltip"><i class="fa fa-plus"></i></a>
+                <a class="btn btn-sm btn-secondary" href="{{ route('get.admin.menu.create') }}" title="Add menu" data-toggle="tooltip"><i class="fa fa-plus"></i></a>
             </div>
             <h4>Menus</h4>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             @if ( ! $menus->isEmpty())
                 <table class="table">
                     <thead>

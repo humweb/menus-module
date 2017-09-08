@@ -5,8 +5,8 @@
         {!! Form::open() !!}
         {!! Form::hidden('menu_id', Request::old("menu_id", $link->menu_id?:0)) !!}
         {!! Form::hidden('parent_id', Request::old("parent_id", $link->parent_id)) !!}
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="card card-default">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -44,9 +44,9 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-footer">
+            <div class="card-footer">
                 {!! Form::submit('Save', array('class' => 'btn btn-primary')) !!}
-                <a href="{{ route('get.admin.menuitem.index', [$link->menu_id]) }}" class="btn btn-default">Cancel</a>
+                <a href="{{ route('get.admin.menuitem.index', [$link->menu_id]) }}" class="btn btn-secondary">Cancel</a>
             </div>
         </div>
         {!! Form::close() !!}

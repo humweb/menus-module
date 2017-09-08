@@ -1,9 +1,9 @@
 @section('content')
 
     {!! Form::open(['route' => 'post.admin.menu.create']) !!}
-    <div class="panel panel-default">
-        <div class="panel-heading"><h4>Create menu</h4></div>
-        <div class="panel-body">
+    <div class="card card-default">
+        <div class="card-header"><h4>Create menu</h4></div>
+        <div class="card-body">
             <div class="form-group">
                 <label for="">Title</label>
                 {!! Form::text('title', Request::old("title"), ['class' => 'form-control']) !!}
@@ -13,7 +13,7 @@
                 {!! Form::text('slug', Request::old("slug"), ['class' => 'form-control', 'id' => 'slug']) !!}
             </div>
         </div>
-        <div class="panel-footer">
+        <div class="card-footer">
             <button type="submit" class="btn btn-primary">Save</button>
         </div>
     </div>
