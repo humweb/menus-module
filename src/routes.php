@@ -39,7 +39,7 @@ $router->group(['middleware' => 'auth', 'prefix' => 'admin/menus'], function ($r
 
     $router->post('sort', [
         'as'          => 'post.admin.menu.sort',
-        'uses'        => 'MenuController@postSort',
+        'uses'        => 'MenuItemsController@postSort',
         'middleware'  => 'allow.only',
         'permissions' => ['menu.edit'],
     ]);

@@ -57,7 +57,13 @@ class MenuItemsController extends AdminController
     }
 
 
-    public function getEditItem(Request $request, $table_id, $id)
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param                          $id
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getEditItem(Request $request, $id)
     {
         $this->data['link']        = MenuItem::findOrFail($id);
         $this->data['user_groups'] = Group::pluck('name');
@@ -65,6 +71,7 @@ class MenuItemsController extends AdminController
 
         // Group permissions
         if ( ! empty($this->data['link']->permissions->groups)) {
+            $menu                       = [];
             $vals                       = array_values($this->data['link']->permissions->groups);
             $this->data['link']->groups = array_combine($vals, $vals);
 
@@ -94,6 +101,7 @@ class MenuItemsController extends AdminController
         $this->data['parent_id']   = $parent_id ?: 0;
         $this->data['pages']       = $this->page->build_select(true);
         $this->data['user_groups'] = Group::pluck('name', 'name');
+
         $this->setTitle('Create Menu Item');
         $this->crumb('Menus', route('get.admin.menu.index'))->crumb('Create');
 
@@ -109,6 +117,7 @@ class MenuItemsController extends AdminController
         $link->parent_id = $request->get('parent_id', 0);
         $link->title     = $request->get('title');
         $link->url       = $request->get('url');
+        $link->content   = $request->get('content');
         $permissions     = [];
 
         if ($request->has('groups')) {
@@ -139,8 +148,10 @@ class MenuItemsController extends AdminController
             'parent_id' => $request->get('parent_id', 0),
             'title'     => $request->get('title'),
             'url'       => $request->get('url'),
+            'content'   => $request->get('content'),
         ];
-        $permissions  = [];
+
+        $permissions = [];
 
         if ($request->has('groups')) {
             $permissions['groups'] = $request->get('groups');
@@ -166,11 +177,12 @@ class MenuItemsController extends AdminController
 
     public function postSort(Request $request)
     {
+        $menuItemClass = new MenuItem();
         $order   = json_decode($request->get('pages'), true);
         $menu_id = $request->get('menu_id');
 
         foreach ($order as $key => $value) {
-            $this->menulink->reorder($menu_id, $order);
+            $menuItemClass->reorder($menu_id, $order);
         }
         Cache::forget('menu_links_'.$menu_id);
 

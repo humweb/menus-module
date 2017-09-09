@@ -63,6 +63,12 @@ class MenuItem extends Model
 
             // Build a multidimensional array of parent > children.
             foreach ($menulinks as $row) {
+
+                if (isset($menulinks[$row['id']]['content']) && ! is_null($menulinks[$row['id']]['content'])) {
+                    $menulinks[$row['id']]['url']   = '#';
+                    $menulinks[$row['id']]['label'] = $menulinks[$row['id']]['content'];
+                }
+
                 if (array_key_exists($row['parent_id'], $menulinks)) {
                     // Add this page to the children array of the parent page.
                     $menulinks[$row['parent_id']]['children'][$row['id']] = $menulinks[$row['id']];
@@ -73,7 +79,6 @@ class MenuItem extends Model
                     $menu_array[$row['id']] = $menulinks[$row['id']];
                 }
             }
-            \Cache::put('menu_links_'.$id, $menu_array, 60);
 
             return $menu_array;
         });

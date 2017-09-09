@@ -16,9 +16,8 @@
                 <h5>Menus</h5>
             </div>
             <div class="card-body">
-
                 <div class="nestable-lists">
-                    <div class="dd">
+                    <div class="dd" id="nestable">
                         <ol class="dd-list">
                             {!! $content !!}
                         </ol>
@@ -27,32 +26,33 @@
 
             </div>
         </div>
-
-        <script src="{{ asset('js/jquery.nestable.js') }}"></script>
-
-        <script>
-            $(function () {
-                var updateOutput = function (e) {
-
-                    var list = e.length ? e : $(e.target), output = list.data('output');
-                    if (window.JSON) {
-                        var data = {
-                            _token: '{{ Session::token() }}',
-                            menu_id: '{{ $menu_id }}',
-                            pages: window.JSON.stringify(list.nestable('serialize'))
-                        };
-                        $.post('/admin/menus/sort', data, function () {
-                        });
-                    } else {
-                        output.val('JSON browser support required for this demo.');
-                    }
-                };
-
-                $('#nestable').nestable({
-                    maxDepth: 10
-                }).on('change', updateOutput);
-
-            });
-        </script>
     </div>
-@show
+@endsection
+
+@section('footer_scripts')
+    <script src="{{ asset('js/jquery.nestable.js') }}"></script>
+    <script>
+        $(function () {
+            var updateOutput = function (e) {
+
+                var list = e.length ? e : $(e.target), output = list.data('output');
+                if (window.JSON) {
+                    var data = {
+                        _token: '{{ Session::token() }}',
+                        menu_id: '{{ $menu_id }}',
+                        pages: window.JSON.stringify(list.nestable('serialize'))
+                    };
+                    $.post('/admin/menus/sort', data, function () {
+                    });
+                } else {
+                    output.val('JSON browser support required for this demo.');
+                }
+            };
+
+            $('#nestable').nestable({
+                maxDepth: 10
+            }).on('change', updateOutput);
+
+        });
+    </script>
+@endsection

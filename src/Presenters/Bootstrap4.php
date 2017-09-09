@@ -19,11 +19,11 @@ class Bootstrap4 implements PresenterInterface
         $class    = ($attr['level'] > 1) ? ' dropdown-submenu' : '';
         $caret    = ($attr['level'] <= 1) ? ' <span class="caret"></span>' : '';
 
-        $str      = '<li class="nav-item dropdown'.$class.'">';
-        $str      .= '<a href="'.$attr['url'].'" class="dropdown-toggle nav-link" data-toggle="dropdown">'.$attr['icon'].$attr['label'].$caret.'</a>';
-        $str      .= '<div class="dropdown-menu">';
-        $str      .= $children;
-        $str      .= '</div></li>';
+        $str = '<li class="nav-item dropdown'.$class.'">';
+        $str .= '<a href="'.$attr['url'].'" class="dropdown-toggle nav-link" data-toggle="dropdown">'.$attr['icon'].$attr['label'].$caret.'</a>';
+        $str .= '<div class="dropdown-menu">';
+        $str .= $children;
+        $str .= '</div></li>';
 
         return $str;
     }
@@ -34,7 +34,7 @@ class Bootstrap4 implements PresenterInterface
         $selected = $attr['selected'] ? ' active' : '';
 
         if ($level > 0) {
-            return '<a href="'.$attr['url'].'" class="dropdown-item">'.$attr['icon'].' '.$attr['label'].'</a>';
+            return '<a href="'.$attr['url'].'" class="dropdown-item'.$selected.'">'.$attr['icon'].' '.$attr['label'].'</a>';
         } else {
             return '<li class="nav-item'.$selected.'">'.'<a href="'.$attr['url'].'" class="nav-link">'.$attr['icon'].' '.$attr['label'].'</a></li>';
         }
