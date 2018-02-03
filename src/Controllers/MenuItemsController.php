@@ -5,10 +5,10 @@ namespace Humweb\Menus\Controllers;
 use Humweb\Auth\Groups\Group;
 use Humweb\Core\Http\Controllers\AdminController;
 use Humweb\Menus\Models\MenuItem;
+use Humweb\Menus\Requests\MenuItemSaveRequest;
 use Humweb\Pages\Repositories\DbPageRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Humweb\Menus\Requests\MenuItemSaveRequest;
 
 class MenuItemsController extends AdminController
 {
@@ -134,7 +134,9 @@ class MenuItemsController extends AdminController
         if ($link->save()) {
             Cache::forget('menu_links_'.$link->menu_id);
 
-            return redirect()->route('get.admin.menuitem.index', array($link->menu_id))->with('success', 'Menu has been item has been saved.');
+            return redirect()
+                ->route('get.admin.menuitem.index', array($link->menu_id))
+                ->with('success', 'Menu has been item has been saved.');
         }
 
         return back()->withInput()->withErrors($link->getErrors());
@@ -168,7 +170,9 @@ class MenuItemsController extends AdminController
         if ( ! is_null($menuItem)) {
             Cache::forget('menu_links_'.$menuId);
 
-            return redirect()->route('get.admin.menuitem.index', array($menuId))->with('success', 'Menu has been created');
+            return redirect()
+                ->route('get.admin.menuitem.index', array($menuId))
+                ->with('success', 'Menu has been created');
         }
 
         return back();
@@ -178,8 +182,8 @@ class MenuItemsController extends AdminController
     public function postSort(Request $request)
     {
         $menuItemClass = new MenuItem();
-        $order   = json_decode($request->get('pages'), true);
-        $menu_id = $request->get('menu_id');
+        $order         = json_decode($request->get('pages'), true);
+        $menu_id       = $request->get('menu_id');
 
         foreach ($order as $key => $value) {
             $menuItemClass->reorder($menu_id, $order);

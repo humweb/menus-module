@@ -61,7 +61,7 @@ class MenusServiceProvider extends ModuleBaseProvider
             'Structure' => [
                 [
                     'label'    => 'Menus',
-                    'icon'     => '<i class="fa fa-navicon" ></i>',
+                    'icon'     => '<i class="fa fa-fw fa-navicon"></i>',
                     'url'      => route('get.admin.menu.index'),
                     'children' => [
                         [

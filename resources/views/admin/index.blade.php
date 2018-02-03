@@ -11,7 +11,7 @@
         <div class="card card-default">
             <div class="card-header">
                 <div class="pull-right">
-                    <a class="btn btn-sm btn-primary" href="{{ route('get.admin.menuitem.create', [$menu_id]) }}" title="Add Link" data-toggle="tooltip"><i class="fa fa-plus"></i></a>
+                    <a class="btn btn-xs btn-primary" href="{{ route('get.admin.menuitem.create', [$menu_id]) }}" title="Add Link" data-toggle="tooltip"><i class="fa fa-plus"></i></a>
                 </div>
                 <h5>Menus</h5>
             </div>

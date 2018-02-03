@@ -144,12 +144,18 @@ class MenuItem extends Model
             foreach ($tree as $leaf) {
                 $output .= '<li class="dd-item" data-id="'.$leaf['id'].'">'.'<div class="dd-handle">Handle</div>'.'<div class="dd-content">'.$leaf['title'];
                 $output .= '<div class="actions">'.'<div class="btn-group btn-group-xs">'.'<a href="'.route('get.admin.menuitem.create',
-                        [$id, $leaf['id']]).'"><i class="fa fa-plus"></i></a>'.'<a href="'.route('get.admin.menuitem.edit',
-                        [$id, $leaf['id']]).'"><i class="fa fa-pencil"></i></a>'.'<a href="'.route('get.admin.menuitem.delete',
+                        [
+                            $id,
+                            $leaf['id']
+                        ]).'"><i class="fa fa-plus"></i></a>'.'<a href="'.route('get.admin.menuitem.edit', [
+                        $id,
+                        $leaf['id']
+                    ]).'"><i class="fa fa-pencil"></i></a>'.'<a href="'.route('get.admin.menuitem.delete',
                         [$id, $leaf['id']]).'"><i class="fa fa-remove"></i></a>'.'</div>'.'</div></div>';
 
                 if (isset($leaf['children']) && ! empty($leaf['children'])) {
-                    $output .= '<ol class="dd-list dd3-list">'.$this->build_admin_tree($id, $leaf['children'], $depth + 1).'</ol>';
+                    $output .= '<ol class="dd-list dd3-list">'.$this->build_admin_tree($id, $leaf['children'],
+                            $depth + 1).'</ol>';
                 }
                 $output .= '</li>';
             }

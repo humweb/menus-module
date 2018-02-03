@@ -78,7 +78,7 @@ class Menu
                 $menus[$this->getChildrenKey()] = $menus[$this->getChildrenKey()]->toArray();
             }
 
-            if (isset($menus[$this->getChildrenKey()]) && !empty($menus[$this->getChildrenKey()]) && $level < 2) {
+            if (isset($menus[$this->getChildrenKey()]) && ! empty($menus[$this->getChildrenKey()]) && $level < 2) {
                 $children = $this->recurseMenu($menus[$this->getChildrenKey()], $level);
                 $str      .= $this->getPresenter()->itemWithChildren($menus, $children, $level);
             } else {
@@ -104,7 +104,8 @@ class Menu
      */
     public function getLabel($item = [], $section)
     {
-        return isset($item[$this->labelAttribute]) ? $item[$this->labelAttribute] : ucwords(str_replace('_', ' ', $section));
+        return isset($item[$this->labelAttribute]) ? $item[$this->labelAttribute]
+            : ucwords(str_replace('_', ' ', $section));
     }
 
 
@@ -170,6 +171,7 @@ class Menu
         if (isset($item['uri'])) {
             return url($item['uri']);
         }
+
         return isset($item['url']) ? $item['url'] : '#';
     }
 

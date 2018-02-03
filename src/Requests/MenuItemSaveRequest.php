@@ -2,7 +2,6 @@
 
 namespace Humweb\Menus\Requests;
 
-
 use Illuminate\Foundation\Http\FormRequest;
 
 class MenuItemSaveRequest extends FormRequest
@@ -31,7 +30,6 @@ class MenuItemSaveRequest extends FormRequest
             'url'       => 'required',
             'title'     => 'required',
         ];
-
 
         return $rules;
     }

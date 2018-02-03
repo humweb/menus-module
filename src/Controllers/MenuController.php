@@ -5,9 +5,9 @@ namespace Humweb\Menus\Controllers;
 use Humweb\Core\Http\Controllers\AdminController;
 use Humweb\Menus\Models\Menu;
 use Humweb\Menus\Models\MenuItem;
-use Humweb\Pages\Repositories\DbPageRepositoryInterface;
-use Illuminate\Http\Request;
 use Humweb\Menus\Requests\MenuSaveRequest;
+use Humweb\Pages\Repositories\DbPageRepositoryInterface;
+
 class MenuController extends AdminController
 {
     protected $menu;

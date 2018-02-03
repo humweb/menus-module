@@ -27,7 +27,7 @@ class Sidebar implements PresenterInterface
         $selected = $attr['selected'] ? ' in' : ' collapse';
         $label    = $level <= 1 ? '<span class="nav-label">'.$attr['label'].'</span>' : $attr['label'];
 
-        $str = '<li>'.'<a href="'.$attr['url'].'" >'.$attr['icon'].$label.' <span class="fa arrow"></span></a>'.'<ul class="nav nav-'.$this->numbers[$attr['level']].'-level'.$selected.'">';
+        $str = '<li>'.'<a href="'.$attr['url'].'">'.$attr['icon'].$label.' <span class="fa arrow"></span></a>'.'<ul class="nav nav-'.$this->numbers[$attr['level']].'-level'.$selected.'">';
         $str .= $children;
         $str .= '</ul></li>';
 
