@@ -33,7 +33,7 @@ class Bootstrap4 implements PresenterInterface
     {
         $selected = $attr['selected'] ? ' active' : '';
 
-        if ($level > 0) {
+        if ($level > 1) {
             return '<a href="'.$attr['url'].'" class="dropdown-item'.$selected.'">'.$attr['icon'].' '.$attr['label'].'</a>';
         } else {
             return '<li class="nav-item'.$selected.'">'.'<a href="'.$attr['url'].'" class="nav-link">'.$attr['icon'].' '.$attr['label'].'</a></li>';

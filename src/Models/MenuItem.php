@@ -142,7 +142,7 @@ class MenuItem extends Model
 
         if (is_array($tree)) {
             foreach ($tree as $leaf) {
-                $output .= '<li class="dd-item" data-id="'.$leaf['id'].'">'.'<div class="dd-handle">Handle</div>'.'<div class="dd-content">'.$leaf['title'];
+                $output .= '<li class="dd-item" data-id="'.$leaf['id'].'">'.'<div class="dd-handle">&nbsp;</div>'.'<div class="dd-content">'.$leaf['title'];
                 $output .= '<div class="actions">'.'<div class="btn-group btn-group-xs">'.'<a href="'.route('get.admin.menuitem.create',
                         [
                             $id,

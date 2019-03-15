@@ -7,6 +7,7 @@ use Humweb\Menus\Models\Menu;
 use Humweb\Menus\Models\MenuItem;
 use Humweb\Menus\Requests\MenuSaveRequest;
 use Humweb\Pages\Repositories\DbPageRepositoryInterface;
+use Illuminate\Http\Request;
 
 class MenuController extends AdminController
 {
@@ -29,7 +30,7 @@ class MenuController extends AdminController
     }
 
 
-    public function getIndex()
+    public function getIndex(Request $request)
     {
         $this->setTitle('Menus');
         $this->crumb('Menus');
@@ -51,7 +52,7 @@ class MenuController extends AdminController
 
     public function postCreate(MenuSaveRequest $request)
     {
-        $menu = Menu::create($request->intersect(['title', 'slug']));
+        $menu = Menu::create($request->only(['title', 'slug']));
 
         if ( ! is_null($menu)) {
             return redirect()->route('get.admin.menu.index')->with('success', 'Menu has been created');
