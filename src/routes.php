@@ -58,7 +58,7 @@ $router->group(['middleware' => 'auth', 'prefix' => 'admin/menus'], function ($r
 
         $router->post('edit/{iid}', [
             'as'   => 'post.admin.menuitem.edit',
-            'uses' => 'MenuController@postEditItem',
+            'uses' => 'MenuItemsController@postEditItem',
         ]);
 
         $router->get('edit/{iid}', [
