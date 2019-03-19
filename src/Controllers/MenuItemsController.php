@@ -63,9 +63,9 @@ class MenuItemsController extends AdminController
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function getEditItem(Request $request, $id)
+    public function getEditItem(Request $request, $menuId, $itemId)
     {
-        $this->data['link']        = MenuItem::findOrFail($id);
+        $this->data['link']        = MenuItem::findOrFail($itemId);
         $this->data['user_groups'] = Group::pluck('name');
         $this->data['pages']       = $this->page->build_select(true);
 

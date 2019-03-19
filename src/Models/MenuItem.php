@@ -143,14 +143,10 @@ class MenuItem extends Model
         if (is_array($tree)) {
             foreach ($tree as $leaf) {
                 $output .= '<li class="dd-item" data-id="'.$leaf['id'].'">'.'<div class="dd-handle">&nbsp;</div>'.'<div class="dd-content">'.$leaf['title'];
-                $output .= '<div class="actions">'.'<div class="btn-group btn-group-xs">'.'<a href="'.route('get.admin.menuitem.create',
-                        [
-                            $id,
-                            $leaf['id']
-                        ]).'"><i class="fa fa-plus"></i></a>'.'<a href="'.route('get.admin.menuitem.edit', [
-                        $id,
-                        $leaf['id']
-                    ]).'"><i class="fa fa-pencil"></i></a>'.'<a href="'.route('get.admin.menuitem.delete',
+                $output .= '<div class="actions">'.
+                    '<div class="btn-group btn-group-xs">'.'<a href="'.route('get.admin.menuitem.create',
+                        [$id, $leaf['id']]).'"><i class="fa fa-plus"></i></a>'.'<a href="'.route('get.admin.menuitem.edit', [$id, $leaf['id']]).'"><i class="fa fa-pencil"></i></a>'.
+                    '<a href="'.route('get.admin.menuitem.delete',
                         [$id, $leaf['id']]).'"><i class="fa fa-remove"></i></a>'.'</div>'.'</div></div>';
 
                 if (isset($leaf['children']) && ! empty($leaf['children'])) {

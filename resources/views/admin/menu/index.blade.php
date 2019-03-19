@@ -23,9 +23,9 @@
                         <tr>
                             <td width="75%">{{ $menu->title }}</td>
                             <td class="text-right">
-                                <a class="btn btn-primary btn-sm" href="{{ route('get.admin.menuitem.index', ['id'=>$menu->id]) }}" title="Manage" data-toggle="tooltip">
+                                <a class="btn btn-primary btn-sm" href="{{ route('get.admin.menuitem.index', [$menu->id]) }}" title="Manage" data-toggle="tooltip">
                                     <i class="fa fa-list"></i></a>
-                                <a class="btn btn-primary btn-sm" href="{{ route('get.admin.menu.edit', ['id'=>$menu->id]) }}" title="Edit" data-toggle="tooltip">
+                                <a class="btn btn-primary btn-sm" href="{{ route('get.admin.menu.edit', [$menu->id]) }}" title="Edit" data-toggle="tooltip">
                                     <i class="fa fa-pencil"></i></a>
                                 {{--<a class="btn btn-danger btn-sm confirm" href="{{ route('get.admin.menu.delete', ['id'=>$menu->id]) }}" title="Remove" data-toggle="tooltip">--}}
                                 {{--<i class="fa fa-remove"></i></a>--}}
